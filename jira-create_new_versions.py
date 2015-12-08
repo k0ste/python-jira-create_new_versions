@@ -44,11 +44,11 @@ def json_versions(json_full, jira_versions, jira_project_key):
         version_comparator = compare_versions(jira_versions, json_version)
         if version_comparator == True:
             '''If returned value is True - version is present, skip it'''
-            print 'For project', jira_project_key, 'version:', json_version, 'is preset, I pass'
+            print 'For project \'%s\', version \'%s\' is present, do nothing' % (jira_project_key, json_version)
             pass
         elif version_comparator == None:
             '''Version is not present, try create it'''
-            print 'For project', jira_project_key, 'version:', json_version, 'is not present\n', 'I generate it with start date', json_start_date, 'and release date', json_release_date
+            print 'For project \'%s\', version \'%s\' is not present\ngenerate it with start date \'%s\' and release date \'%s\'' % (jira_project_key, json_version, json_start_date, json_release_date)
             try:
                 jira.create_version(name=json_version, project=jira_project_key, description=json_desc, releaseDate=json_release_date, startDate=json_start_date)
             except JIRAError:
@@ -71,8 +71,8 @@ def main():
     parser = OptionParser(usage='%prog -s http://localhost/jira -j JSONFILE -u admin -p admin', version='%prog 0.1')
     parser.add_option('-s', '--server', type='string', dest='jira_server', help='JIRA instance')
     parser.add_option('-j', '--json-file', type='string', dest='json_file', default='versions.json', help='The json versions definition')
-    parser.add_option('-u', '--username', type='string', dest='jira_username', default='admin', help='Username of JIRA account for auth basic [default: %default]')
-    parser.add_option('-p', '--password', type='string', dest='jira_password', default='admin', help='Password of JIRA account for auth basic [default: %default]')
+    parser.add_option('-u', '--username', type='string', dest='jira_username', help='Username of JIRA account for auth basic')
+    parser.add_option('-p', '--password', type='string', dest='jira_password', help='Password of JIRA account for auth basic')
     parser.add_option('--scope', type='int', dest='version_scope', default='12', help='How many versions for parse [default: %default]')
     (options, args) = parser.parse_args()
 
